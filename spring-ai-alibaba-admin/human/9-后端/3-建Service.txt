@@ -1,0 +1,38 @@
+第二批是 Service 接口和实现。
+
+提示词 ：
+
+基于 solution.md 的 P04-P05，给 PromptVersionService 加 diffVersions 方法
++ 在 PromptVersionServiceImpl 里实现。
+
+要求：
+- 严格按 solution.md 步骤 2 的设计：调 Mapper 两次 → 校验 → 内存比较三字段 → 组装返回
+- null 处理用 Objects.equals(nullToEmpty(a), nullToEmpty(b))，对应 D1 决策
+- 复用 getByPromptKeyAndVersion 现有方法（18 讲 solution.md 影响范围第 2 条
+  已确认该方法只有 log.info 无 metrics 副作用，不需要抽 getVersionInternal）
+- 不要重构 getByPromptKeyAndVersion 任何细节，只调用它
+- 异常用 StudioException + INVALID_PARAM/NOT_FOUND 错误码
+
+实现完跑一遍 mvn test，确认 Step 1 的 Characterization Test 全部通过
+（行为没偏移）。如果有测试失败，stop，告诉我具体是哪个测试、什么原因。
+
+只做 P04-P05，不要做 P06。
+注意提示词最后一段：让 AI 跑 Step 1 的 Characterization Test，有失败就 stop，这是兜底机制。Characterization Test 失败，说明改造意外破坏了现有行为，必须人介入判断。
+
+这里实际有 3 个实现要点（执行后记录）：
+
+diffVersions 先校验 versionA == versionB（抛 INVALID_PARAM），再查 promptMapper 确认 promptKey 存在（抛 NOT_FOUND），再两次调 Mapper 查版本（各自抛 NOT_FOUND），最后内存比较组装返回。
+
+null 处理用局部变量 String sa = a != null ? a : ""，再 !Objects.equals(sa, sb) 判断 changed，等价于 nullToEmpty 语义，用标准库不引入额外依赖。
+
+getByPromptKeyAndVersion 原方法零改动，Characterization Test 验证通过：
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0 BUILD SUCCESS
+
+review 重点：
+
+有没有动 getByPromptKeyAndVersion。 git diff 看 PromptVersionServiceImpl，应该只有新增 diffVersions 方法以及两个私有辅助方法（toVersionMeta、diffItem），原方法一行不动。如果 AI 动了原方法（哪怕只是格式化），让它撤销。
+
+null 处理对不对 。打开 diffItem 实现，确认空值处理是 a != null ? a : "" 后再 Objects.equals 比较，而不是 AI 凭直觉用的 a == null && b == null（后者语义完全不同）。
+
+Characterization Test 全过 。这是硬指标。

@@ -1,0 +1,10 @@
+提示词 ：
+
+基于 docs/test-gaps.md，把 P0 缺口拆成多批，每批 1-3 个（最好 1 个），
+给我一份补测试计划。每批写：批次号、测试类型（Characterization
+Test / 集成测试 / 单元测试）、覆盖的核心链路、预期工作量。
+
+按"改造路径上的 Characterization > 核心链路集成 > 复杂逻辑单元"的顺序排批次。
+简单 CRUD 不进计划。
+
+输出用表格总结。保存到 docs/test-plan.md。

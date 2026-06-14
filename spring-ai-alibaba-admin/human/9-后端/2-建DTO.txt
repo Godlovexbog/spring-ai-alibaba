@@ -1,0 +1,20 @@
+提示词 ：
+
+基于 docs/requirements/prompt-version-diff-solution.md 的 P01-P03，
+建三个 DTO 类：PromptVersionDiffResult、VersionMeta、DiffItem。
+
+要求：
+- 严格按 solution.md 第 7 节的最终决策（D1 null 视同空字符串等）
+- 字段名、类型、注释和 solution.md 对齐
+- 对齐项目现有 DTO 风格（lombok 注解、字段命名、null 处理）
+- createTime 用 epoch ms（与现有 PromptVersionDetail.createTime 一致）
+- 不要顺手改其他文件
+
+只做 P01-P03 这三个 DTO，做完汇报，不要继续做 P04-P05。
+最后一句“只做 P01-P03，不要继续 P04-P05”是关键约束。AI 默认会一口气改完，明确告诉它停在这一步。产出是3 个新建的 DTO 文件（这里代码可以看我们的代码仓库，就不展开细讲了），全部加 @Data @Builder @NoArgsConstructor @AllArgsConstructor，字段对齐 solution.md 文件的内容。
+
+review 重点：
+
+字段是不是和 solution.md 对得上 。打开 solution.md 第 3 节改造点表格 + 第 6 节决策点，逐字段对照 AI 写的 DTO。
+
+有没有顺手改其他文件 。git status 看一下，应该只有三个新建的 java 文件。如果发现 AI 还动了别的文件，让它解释为什么改，然后让它撤销不必要的改动。

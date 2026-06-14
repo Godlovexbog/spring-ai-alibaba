@@ -1,0 +1,11 @@
+提示词 ：
+
+基于 docs/api-list.md、docs/data-model.md、CLAUDE.md，给我列出
+这个项目最值得测的核心链路。要求：
+- 总数不超过 8 条，宁少勿多
+- 必须是"改造时容易出问题"的链路，不是所有链路
+- 每条写：链路名、起点（哪个接口）、关键节点（哪些 service / DB 操作）、
+终点（什么状态算成功）
+
+输出用表格总结。保存到 docs/critical-paths.md。
+产出：docs/critical-paths.md。

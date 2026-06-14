@@ -1,0 +1,7 @@
+提示词 ：
+
+跑一遍完整测试，含新增的 server-start 测试：
+mvn test -pl spring-ai-alibaba-admin-server-runtime,spring-ai-alibaba-admin-server-core,spring-ai-alibaba-admin-server-start
+  -am -Dsurefire.failIfNoSpecifiedTests=false -fae
+输出全部测试结果（通过 / 失败 / 跳过 各多少）。
+失败的列出来，但不要试图修，只汇报。

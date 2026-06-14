@@ -1,0 +1,47 @@
+Step 5：补单元测试 + curl 验证返回结构
+新接口跑通了，分两部分：先补 Service 层单元测试，再 curl 验证真实 HTTP 响应结构。
+
+两者不能互相替代：单元测试验证 Service 逻辑正确，curl 验证序列化到 JSON 的结构对得上接口契约。JSON 字段名拼错、类型序列化异常这类问题单元测试发现不了。
+
+提示词（单元测试） ：
+
+给 diffVersions 补单元测试，测试加在 server-start 模块下（原因同 Step 1：
+PromptVersionServiceImpl 和 StudioException 在 server-start，server-core 无法访问）
+PromptVersionServiceDiffTest.java（如果不存在就新建）。
+
+注意：项目当前没有 Testcontainers 基础设施，不能用 SpringBootTest + 真实 DB。
+用 @ExtendWith(MockitoExtension.class) + Mockito mock PromptVersionMapper 和 PromptMapper
+（diffVersions 内部调了两个 Mapper，两个都要 mock）。
+
+覆盖需求文档 prompt-version-diff.md 第 4 节的关键边界：
+  * E01 versionA == versionB → 抛 StudioException(INVALID_PARAM)
+  * E02 versionA 不存在 → 抛 StudioException(NOT_FOUND)，errMsg 含版本号
+  * E04 template 为 null → valueA/valueB 返回 ""，changed=false（两个都是空字符串）
+  * 正常 happy path（两版本 template 不同 → changed=true，variables 相同 → changed=false）
+
+测试断言凭"实际跑出来是什么"写，不凭"应该是什么"。
+跑命令：mvn test -pl spring-ai-alibaba-admin-server-start -am
+  -Dtest=PromptVersionServiceDiffTest -Dsurefire.failIfNoSpecifiedTests=false
+
+汇报每个测试覆盖的场景和实际跑通的状态。
+产出：4 个单元测试，全部通过。
+
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.601 s
+BUILD SUCCESS
+四个场景的实际验证结果：
+
+E01：diffVersions("key","v1","v1") → 抛 StudioException，errCode=400，无需查 DB
+
+E02：mock Mapper 返回 null for versionA → 抛 StudioException，errCode=404，errMsg 包含版本号 "v1"
+
+E04：两版本 template 均为 null → valueA=""、valueB=""、changed=false（空字符串相等）
+
+happy path：template 不同 → changed=true；variables 相同 → changed=false；promptKey/version/status字段值与 mock 数据一致
+
+review 重点：
+
+断言基于实际行为 。看到 assertEquals(...) 追问 AI “这个值是跑出来的还是猜的”。Mockito 测试里 AI 容易直接 when(...).thenReturn(mock对象) ，然后凭直觉写断言，而不是先想“这个 mock 会让 diffVersions 实际算出什么”。
+
+边界场景齐全 。E01/E02/E04 + happy path 四条都有，少一条让 AI 补。
+
+Mockito mock 范围对 。mock PromptVersionMapper 和 PromptMapper，不要 mock PromptVersionService 自身，测的是真实 diffVersions 实现，不是 mock 出来的壳。

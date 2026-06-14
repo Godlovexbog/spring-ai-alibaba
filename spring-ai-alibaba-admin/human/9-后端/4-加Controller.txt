@@ -1,0 +1,39 @@
+Step 4：加 Controller（P06）
+提示词 ：
+
+基于 solution.md 的 P06，给 PromptController 加 GET /api/prompt/version/diff 接口。
+
+要求：
+- 三个入参：promptKey、versionA、versionB，全部 @RequestParam，加 @NotBlank
+- 正常路径返回 Result.success(data)，对齐 PromptController 现有接口写法
+- 异常处理走全局 GlobalExceptionHandler（@RestControllerAdvice），
+  不要在 Controller 里 try-catch，不要自己包装错误响应
+- 接口路径 /api/prompt/version/diff，注意路径不冲突（已确认现有
+  /api/prompt/version 是单版本查询）
+- 不要重构 PromptController 现有的其他接口
+
+跑一遍 mvn test 确认全部通过（含 Step 1 的 Characterization Test）。
+然后用 curl 跑一下新接口，看返回结构对不对。
+
+只做 P06，不要继续做集成测试，那是下一步。
+产出：PromptController 新增一个方法，import 新增 PromptVersionDiffResult，其余接口零改动。Characterization Test 继续全过。
+
+实际加进去的接口签名：
+
+@GetMapping("/prompt/version/diff")
+public Result<PromptVersionDiffResult> diffPromptVersions(
+        @RequestParam @NotBlank String promptKey,
+        @RequestParam @NotBlank String versionA,
+        @RequestParam @NotBlank String versionB) throws StudioException {
+    log.info("对比Prompt版本差异请求: promptKey={}, versionA={}, versionB={}", promptKey, versionA, versionB);
+    return Result.success(promptVersionService.diffVersions(promptKey, versionA, versionB));
+}
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+review 重点：
+
+接口签名对 。和 solution.md 第 3 节里 P06 的描述完全一致。
+
+没有重构其他接口 。git diff PromptController.java，应该只有新增方法 + 一行 import，其余内容一字不动。
+
+curl 返回结构对 。手动 curl 一下，看返回 JSON 结构和 solution.md 第 3 节的接口契约对得上。这一步人来做：AI 报告“接口跑通了”不一定可信，自己跑一次最稳。

@@ -1,0 +1,20 @@
+提示词 ：
+
+我要改造 PromptVersionServiceImpl，在改之前需要先用 Characterization Test
+锁住 getByPromptKeyAndVersion 方法的现有行为。
+
+要求：
+- 不要凭"应该是什么"写断言，凭"实际跑出来是什么"写
+- 先读 getByPromptKeyAndVersion 的实现，记录它实际做的事，再照实际行为写断言
+- 测试覆盖两种场景：正常返回（版本存在）、版本不存在抛 StudioException
+  （注意：该方法不做状态过滤，不要凭假设加"状态过滤"场景）
+- 用 Mockito mock PromptVersionMapper，不依赖真实数据库
+- 测试加在 spring-ai-alibaba-admin-server-start 模块下新建（原因：
+  PromptVersionServiceImpl 和 StudioException 都在 server-start，server-core
+  没有依赖 server-start，无法访问这些类）
+  路径：src/test/java/.../admin/service/impl/PromptVersionServiceImplTest.java
+- 跑命令：mvn test -pl spring-ai-alibaba-admin-server-start -am
+  -Dtest=PromptVersionServiceImplTest -Dsurefire.failIfNoSpecifiedTests=false
+
+跑完汇报：测试覆盖了哪些场景、断言基于的实际值是什么、跑通的状态。
+这个提示词很细，基本你只有理解上一节课获得的改造点，才能理解这个提示词的意思。这里我想提醒的是，建议你详细琢磨。因为老项目改造需要的是细心、细节和经验，而这些就是在琢磨中训练出来的。

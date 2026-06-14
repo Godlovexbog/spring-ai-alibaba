@@ -1,0 +1,18 @@
+后端改造跑通了（P01-P06 + 测试）。更新相关 docs/ 资产：
+
+1. docs/api-list.md：
+   把之前标"开发中"的 GET /api/prompt/version/diff 改为"已上线（后端）"
+   入参和返回结构按实际实现校对一遍
+
+2. docs/data-model.md：
+   三个新 DTO 的字段如有任何 review 中调整过的，同步更新
+
+3. docs/requirements/prompt-version-diff-solution.md：
+   在每条改造点（P01-P06）后面标注实际 commit hash 和文件路径，方便回溯
+
+输出每份文件的改动 diff。
+产出：三份文档同步更新。
+
+实际执行时有一个细节要核对：PromptVersionDiffResult 里用了静态内部类 DiffFields，而不是独立顶层类。docs/data-model.md 里要把这个嵌套关系写清楚，不然会以为要新建四个文件（实际只有三个）。
+
+另外 solution.md 里第 3 节写的是“P03 新增 dto/DiffItem.java”，但实际实现里没有独立的 DiffFields.java，DiffFields 是 PromptVersionDiffResult 的内部类。文档标注时要反映这个实际结构，不要照抄 solution.md 里的预期描述。
