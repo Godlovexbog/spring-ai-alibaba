@@ -1,0 +1,7 @@
+中间件已经起来了（用 ./scripts/deps-status.sh 确认）。
+现在帮我跑 mvn clean package + 启动应用。
+启动过程同样遵循自主修复原则
+（参照 Step 2A 的兜底机制：连续 3 次同一错误才停下来汇报）。
+
+启动成功后告诉我应用监听的端口、管理界面地址。
+失败和修复的过程记到 docs/startup-log.md。

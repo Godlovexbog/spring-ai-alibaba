@@ -1,0 +1,4 @@
+读 docs/api-list.md，挑 5 个最核心的接口（覆盖登录、Prompt、
+Dataset、Evaluator、Trace 几大模块），用 curl 跑一遍。
+返回 200 算通过，返回错误的列出来。
+最后输出一份 docs/smoke-test-result.m

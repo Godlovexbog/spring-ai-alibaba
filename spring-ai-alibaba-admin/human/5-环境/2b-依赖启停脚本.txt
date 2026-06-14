@@ -1,0 +1,10 @@
+基于 Step 2A 装好的中间件，生成三个脚本到 scripts/ 下：
+- deps-start.sh：一键启动所有依赖中间件
+- deps-stop.sh：一键停止所有依赖中间件
+- deps-status.sh：查看每个中间件的运行状态
+
+考虑混合场景：有的用 brew services 管，有的是手动 jar，
+有的是 systemd。脚本要能处理这几种。
+启动后等服务就绪再返回，不要"启动了但还没 ready"。
+status 脚本要打印每个中间件的运行状态和端口监听情况。
+产出：scripts/deps-start.sh / deps-stop.sh / deps-status.sh。
