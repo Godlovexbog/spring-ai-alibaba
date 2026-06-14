@@ -1,0 +1,13 @@
+提示词 ：
+
+扫一下这个项目里所有的 Controller，给我整理一份 REST 接口清单。
+每个接口列出方法（GET/POST 等）、路径、一句话说明、主要入参、返回结构。
+按模块分组。保存到 docs/api-list.md。
+关键点 ：
+
+“按模块分组”是让清单有组织。Spring AI Alibaba Admin 有 Prompt、Dataset、Evaluator、Experiment、Trace 几大模块，每个模块下有若干接口。分组的清单可读性远高于一张一百行的大表。
+
+“一句话说明”强制 AI 给出人类能看懂的意图，而不是只抄 @Operation 注解或方法名。接口叫 createPromptTemplate，一句话说明应该是“创建一个新的 Prompt 模板”，让非开发同事也能看懂。
+
+“主要入参、返回结构”要求 AI 不只列端点，还要列参数类型和返回类型，但不要展开所有字段 ，只要主要的。字段细节交给数据模型那份文档。
+

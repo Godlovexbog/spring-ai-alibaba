@@ -1,0 +1,15 @@
+提示词 2：模块依赖图
+
+看一下项目的 pom.xml，画一张内部模块依赖图。
+只画项目自己的模块，外部库不画。有循环依赖用红色标出来。
+保存到 docs/module-deps.svg。
+
+
+
+常见坑 ：
+
+第一个坑，AI 可能把 server-start 模块漏掉。start 模块通常是 entry point（main 方法在里面），AI 容易认为它是“运行时入口”而不是“代码模块”。review 的时候看 start 模块有没有在图里，以及它有没有正确地依赖其他三个 server 模块。
+
+第二个坑，依赖方向可能画反。正确的方向是 start 依赖 runtime 和 openapi，openapi 和 runtime 都依赖 core。如果图里出现 core 反过来依赖 runtime 这种，就是错的，要让 AI 重画。
+
+第三个坑，frontend 不应该出现在这张图里。模块图只画 Java 模块之间的依赖关系，frontend 是独立的 React 工程，通过 HTTP 调用后端，不通过 Maven 依赖。AI 有时候会把 frontend 也塞进去，要让它去掉。

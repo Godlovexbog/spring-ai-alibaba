@@ -1,0 +1,5 @@
+综合看 docs/external-deps.svg、application*.yml、pom.xml、README，
+给我列一份这个项目运行需要的完整外部依赖清单。
+每个依赖列出：名字、版本要求（精确到主版本）、默认端口、
+连接信息、初始化要求（建库、配 Nacos 命名空间等）。
+保存到 docs/env-checklist.md。

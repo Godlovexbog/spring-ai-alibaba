@@ -1,0 +1,17 @@
+提示词 3：外部依赖图
+
+综合看 pom.xml、application.yml 和 README，帮我梳理这个项目。
+对外依赖了什么。分成三类：关键 Java 依赖、中间件、外部 API。
+画出来，每类用不同颜色。保存到 docs/external-deps.svg。
+
+
+分三类是这张图的灵魂。Java 依赖看 pom（Spring AI、Spring Boot Actuator、Micrometer 等），中间件看 application.yml 和 docker-compose（MySQL、Nacos、OTel Collector），外部 API 看 README 和配置样例（DashScope、OpenAI、DeepSeek 等模型提供商）。
+
+
+常见坑 ：
+
+第一个坑，AI 容易把 transitive dependency 全列出来。Spring Boot 一个 starter 就能拉几十个间接依赖，全画进来就没法看了。提示词里强调“关键”，review 的时候挑出真正的项目主干依赖，砍掉无关的。
+
+第二个坑，AI 可能不知道“应该看 application.yml 才知道中间件”。如果第一版画出来只有 Java 依赖没有中间件，直接告诉它“去读 application.yml 和 application-*.yml，看项目连了什么中间件”。
+
+第三个坑，外部模型 API 这一类容易漏。因为它们在代码里是通过配置注入的，不在 pom.xml 里。README 的 Configure Your API Keys 一节会说清楚项目支持哪些 API。让 AI 读 README 的这一节。

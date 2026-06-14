@@ -1,0 +1,23 @@
+提示词 ：
+
+看项目的 entity 类、DTO、数据库建表 SQL，给我梳理核心数据模型。
+每个模型列出字段、类型、一句话说明。标出主键、外键、枚举值。
+关键模型之间的关系画一张简单的 ER 图。保存到 docs/data-model.md 和 docs/data-model-er.svg。
+关键点 ：
+
+三个数据源一起看 ：entity 类（Java 层的 model）、DTO（传输层的 model）、建表 SQL（DB 层的 model）。三者不完全一致是常态，比如 entity 有的字段 DTO 里不暴露，DTO 有的字段是两个 entity 的组合。让 AI 三边对照。
+
+“标出主键、外键、枚举值”这三个是数据模型的硬信息 。主键告诉你每个表怎么定位一条记录，外键告诉你表之间怎么关联，枚举告诉你某些字段的取值范围（比如 Prompt 的状态、Experiment 的运行状态）。这三个是改造时最容易踩坑的地方。
+
+让 AI 同时产出 Markdown 说明和一张 ER 图。前者适合精确查找（PromptTemplate 表有哪些字段），后者适合整体把握（这几个表是怎么关联的）。
+
+
+
+
+常见坑 ：
+
+第一个坑，AI 可能只看 Java 层的 entity，忽略建表 SQL。这样拿到的字段可能和数据库实际表不一致。比如 JPA 的 @Transient 字段在 entity 里有、DB 里没有，反过来 DB 有一些字段没映射到 entity 里。让 AI 以 DB 层为准 ，entity 和 DTO 作为参照。
+
+第二个坑，AI 可能把 DTO 和 entity 混成一个说明。这两种 model 的职责完全不同：entity 是持久层的映射，DTO 是传输层的契约。放一起说你会晕。让 AI 分开，entity 一份、DTO 一份 ，分别说清楚。
+
+第三个坑，ER 图里容易漏关系。有些关系不通过外键表达，是通过业务代码维护的“逻辑关联”（比如 prompt_id 是某个字段，但 DB 里没建外键约束）。让 AI 除了看 DDL，也扫一下代码里 findBy 之类的查询方法，把隐式关系补上。
