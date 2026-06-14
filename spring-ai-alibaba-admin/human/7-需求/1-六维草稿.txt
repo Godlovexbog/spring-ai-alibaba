@@ -1,0 +1,24 @@
+我有一个新需求：给 Prompt 管理加版本对比功能。
+GET /api/prompt/version/diff?promptKey=xxx&versionA=v3&versionB=v5
+返回两个版本的 diff 结果。
+
+读 docs/ 下的所有资产（特别是 api-list.md、data-model.md、CLAUDE.md），
+再扫一下代码里现有 Prompt 版本相关的实现（PromptVersionController、
+PromptService、PromptVersionEntity），按以下六个维度给我写需求文档草稿：
+
+1. 业务目标（一句话）
+2. 用户场景（典型使用场景 + 当前痛点）
+3. 接口契约（方法、路径、入参、返回、错误码，对齐项目现有风格）
+4. 边界场景清单（至少列 8 条 edge case，包括从现有代码反推的，
+   每条标"待产品决策"或基于现有代码的预期行为）
+5. 老项目约束（CLAUDE.md 禁区和历史包袱里和这个需求相关的，
+   每条标 CLAUDE.md 来源）
+6. 不在这次范围里的事（先列你能想到的候选，最终我来定）
+
+
+强制读 docs/ + CLAUDE.md + 现有代码（把老项目隐性知识显性化）
+单独列“老项目约束”维度（强迫 AI 显式输出禁区和历史包袱）
+边界场景至少 8 条 + 每条标“预期行为”或“待产品决策”（防止 AI 偷懒只列 happy path）
+“不在这次范围里” AI 先列候选，人后定（AI 提供候选，决策权在人）
+
+保存到 docs/requirements/prompt-version-diff.md。

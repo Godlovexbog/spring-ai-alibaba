@@ -1,0 +1,8 @@
+基于 docs/requirements/prompt-version-diff.md 的需求，扫一下代码：
+- 找出这次改造涉及的完整链路（从 HTTP 入口到 DB 查询）
+- 每个节点说明：文件、类、方法、关键逻辑（只看相关的）
+- 标出"现有节点"和"需要新增/修改的节点"
+- 不要漏前端节点（前端入口、调用、组件）
+
+输出用表格 + 链路图（可以是 mermaid）。
+保存到 docs/requirements/prompt-version-diff-impact.md。
